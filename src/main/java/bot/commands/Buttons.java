@@ -135,7 +135,7 @@ public class Buttons {
 
     public EditMessageText buttonAlfaBank(long chatId, long messageId) {
 
-        EditMessageText message = editor(chatId, T_BANK_MESSAGE, messageId);
+        EditMessageText message = editor(chatId, ALFA_BANK_MESSAGE, messageId);
 
         List<InlineKeyboardButton> rowButtons1 = new ArrayList<>();
         List<InlineKeyboardButton> rowButtons2 = new ArrayList<>();
