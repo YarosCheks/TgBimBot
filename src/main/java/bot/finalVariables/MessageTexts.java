@@ -47,6 +47,6 @@ public class MessageTexts {
             "за любые другие продукты денежное вознаграждение <b>не предусмотренно</b>!";
     public static final String ALFA_BANK_MESSAGE =
             "<b>Альфа-Банк. Выбери продукт:</b>\n\n" +
-            "...";
+            "Переходи по ссылке кнопки \"Выбрать продукт\", выбирай и оформляй его.";
     public static final String WORKS_MESSAGE = "Выбери работу:";
 }

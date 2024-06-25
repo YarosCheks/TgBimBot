@@ -32,21 +32,25 @@ public class Bot extends TelegramLongPollingBot {
 
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
-            long nayarekChatId = 6422071424L;
+//            long nayarekChatId = 6422071424L;
             long neyarexChatId = 7108821205L;
 
             switch (messageText) {
                 case "/start" -> executeMessage1(commandSlash.slashStart(chatId));
                 case "/chatId" -> executeMessage1(sender(chatId, STR."Ваш chat ID: \{chatId}"));
-                case "/oslota" -> {
-                    executeMessage1(sender(neyarexChatId,
-                            STR."Пидор @\{update.getMessage().getChat().getUserName()} написал /oslota"));
-                    executeMessage1(sender(nayarekChatId,
+                case "/oslota" -> executeMessage1(sender(neyarexChatId,
                             STR."Пидор @\{update.getMessage().getChat().getUserName()} написал /oslota"));
 
-                }
                 case "/myName" -> executeMessage1(sender(chatId, STR."@\{update.getMessage().getChat().getUserName()}"));
-                default -> unknownMessage(chatId);
+                default -> {
+                    if (messageText.contains("neyarex")) {
+                        executeMessage1(sender(neyarexChatId,
+                                STR."Пидор @\{update.getMessage().getChat().getUserName()} обратился к вам:\n\n" + messageText + "\n\nChatId: " + chatId));
+                        executeMessage1(sender(chatId, "Обращение принято!"));
+                    } else {
+                        unknownMessage(chatId);
+                    }
+                }
             }
 
         } else if (update.hasCallbackQuery()) {
@@ -122,6 +126,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "7464725558:AAH2TRJQGVaT9AH2hnk_FG5oamymZPILyPc";
+        return "TOKEN";
     }
 }
