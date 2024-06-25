@@ -11,7 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static bot.HelpMethods.*;
 import static bot.finalVariables.ButtonNames.*;
@@ -24,7 +26,8 @@ public class Bot extends TelegramLongPollingBot {
 
     Slash commandSlash = new Slash();
     Buttons commandButton = new Buttons();
-
+    boolean appeal = true;
+    Map<Long, Boolean> usersId = new HashMap<>();
     @Override
     public void onUpdateReceived(Update update) {
 
@@ -32,23 +35,43 @@ public class Bot extends TelegramLongPollingBot {
 
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
+
 //            long nayarekChatId = 6422071424L;
             long neyarexChatId = 7108821205L;
 
             switch (messageText) {
-                case "/start" -> executeMessage1(commandSlash.slashStart(chatId));
-                case "/chatId" -> executeMessage1(sender(chatId, STR."Ваш chat ID: \{chatId}"));
-                case "/oslota" -> executeMessage1(sender(neyarexChatId,
-                            STR."Пидор @\{update.getMessage().getChat().getUserName()} написал /oslota"));
+                case "/start" -> {
+                    usersId.put(chatId, appeal);
+                    executeMessage1(commandSlash.slashStart(chatId));
+                }
 
-                case "/myName" -> executeMessage1(sender(chatId, STR."@\{update.getMessage().getChat().getUserName()}"));
+                case "/chatId" -> executeMessage1(sender(chatId, STR."Ваш chat ID: \{chatId}"));
+                case "/usersId" -> executeMessage1(sender(chatId, STR."Список пользователей: \{usersId}"));
                 default -> {
-                    if (messageText.contains("neyarex")) {
-                        executeMessage1(sender(neyarexChatId,
-                                STR."Пидор @\{update.getMessage().getChat().getUserName()} обратился к вам:\n\n" + messageText + "\n\nChatId: " + chatId));
-                        executeMessage1(sender(chatId, "Обращение принято!"));
+
+                    if (chatId == neyarexChatId) {
+
+                        try{
+                            usersId.put(Long.parseLong(messageText), true);
+                            executeMessage1(sender(chatId, "Пользователь снова может обратиться к вам!"));
+                        } catch (Exception _) {
+
+                        }
                     } else {
-                        unknownMessage(chatId);
+
+                        if (messageText.toLowerCase().contains("neyarex") && usersId.get(chatId)) {
+
+                            SendMessage message = sender(neyarexChatId,
+                                    STR."Пидор @\{update.getMessage().getChat().getUserName()} " +
+                                            STR."обратился к вам:\n\n\{messageText}\n\nChatId: \{chatId}");
+                            executeMessage1(message);
+                            usersId.put(chatId, false);
+                            executeMessage1(sender(chatId, "Обращение отправлено!"));
+                        } else if (!usersId.get(chatId)) {
+                            executeMessage1(sender(chatId, "Обращение уже отправлено. Нельзя обратиться дважды!"));
+                        } else {
+                            unknownMessage(chatId);
+                        }
                     }
                 }
             }
@@ -126,6 +149,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "TOKEN";
+        return "7464725558:AAFpnL9EpEk0hzgzcji2mkMh7WQx6-ea4sk";
     }
 }
