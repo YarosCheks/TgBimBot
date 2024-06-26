@@ -28,4 +28,9 @@ public class Slash {
 
         return message;
     }
+
+    public SendMessage slashChatId(long chatId) {
+
+        return sender(chatId, STR."ID вашего чата: \{chatId}");
+    }
 }

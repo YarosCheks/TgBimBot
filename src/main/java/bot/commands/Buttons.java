@@ -1,5 +1,6 @@
 package bot.commands;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -18,6 +19,27 @@ public class Buttons {
     public EditMessageText buttonBegin(long chatId, long messageId) {
 
         return editor(chatId, START_MESSAGE, messageId);
+    }
+
+    public SendMessage buttonBegin2(long chatId) {
+        SendMessage message = sender(chatId, MAIN_MANU_MESSAGE);
+
+        List<InlineKeyboardButton> rowButtons1 = new ArrayList<>();
+        List<InlineKeyboardButton> rowButtons2 = new ArrayList<>();
+        List<InlineKeyboardButton> rowButtons3 = new ArrayList<>();
+
+        rowButtons1.add(newButton(WELCOME_NAME, WELCOME));
+
+        rowButtons2.add(newButtonWithUrl(SMICH_CHANNEL_NAME, SMICH_CHANNEL, SMICH_URL));
+        rowButtons2.add(newButtonWithUrl(BIMARIUM_CHANNEL_NAME, BIMARIUM_CHANNEL, BIMARIUM_URL));
+
+        rowButtons3.add(newButtonWithUrl(SMICH_WELCOME_CHANNEL_NAME, SMICH_WELCOME_CHANNEL, SMICH_WELCOME_URL));
+
+        InlineKeyboardMarkup markup = newMarkup3(rowButtons1, rowButtons2, rowButtons3);
+
+        message.setReplyMarkup(markup);
+
+        return message;
     }
 
     public EditMessageText buttonMainManu(long chatId, long messageId) {
