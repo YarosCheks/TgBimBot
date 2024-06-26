@@ -2,17 +2,14 @@ package bot;
 
 import bot.commands.Buttons;
 import bot.commands.Slash;
+import bot.commands.Texts;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static bot.HelpMethods.*;
@@ -24,6 +21,7 @@ public class Bot extends TelegramLongPollingBot {
 
     Slash commandSlash = new Slash();
     Buttons commandButton = new Buttons();
+    Texts commandText = new Texts();
     Map<Long, Boolean> usersId = new HashMap<>();
     @Override
     public void onUpdateReceived(Update update) {
@@ -44,24 +42,15 @@ public class Bot extends TelegramLongPollingBot {
 
                     if (messageText.toLowerCase().contains("neyarex") && usersId.get(chatId) && chatId != neyarexChatId) {
 
-                        SendMessage message = sender(neyarexChatId,
-                                STR."Пидор @\{update.getMessage().getChat().getUserName()} " +
-                                        STR."обратился к вам:\n\n\{messageText}\n\nChatId: \{chatId}");
-
-                        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                        List<List<InlineKeyboardButton>> rowsButtons = new ArrayList<>();
-                        List<InlineKeyboardButton> rowButtons1 = new ArrayList<>();
-                        rowButtons1.add(newButton("Обработано", Long.toString(chatId)));
-                        rowsButtons.add(rowButtons1);
-                        markup.setKeyboard(rowsButtons);
-                        message.setReplyMarkup(markup);
-
-                        executeMessage1(message);
+                        executeMessage1(commandText.neyarexHandler(chatId, update, messageText));
                         usersId.put(chatId, false);
                         executeMessage1(sender(chatId, "Обращение отправлено!"));
                     } else if (!usersId.get(chatId) && chatId != neyarexChatId) {
-                        executeMessage1(sender(chatId, "Обращение уже отправлено. Нельзя обратиться дважды!"));
+
+                        executeMessage1(sender(chatId, "Обращение уже отправлено. " +
+                                "Нельзя обратиться дважды!"));
                     } else {
+
                         unknownMessage(chatId);
                     }
                 }
