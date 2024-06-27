@@ -2,7 +2,7 @@ package bot.finalVariables;
 
 public class Links {
 
-    public static final String SMICH_URL = "https://t.me/smich_tg";
+    public static final String SMICH_URL = "https://t.me/smich_main";
     public static final String BIMARIUM_URL = "https://t.me/bimarium";
     public static final String SMICH_WELCOME_URL = "https://t.me/smich_welcome";
     public static final String T_BANK_BLACK_URL = "https://www.tbank.ru/baf/27paJgcbRCS";

@@ -18,7 +18,6 @@ public class ButtonNames {
     public static final String T_BANK_BUSINESS_ACCOUNT_NAME = "Счёт для бизнеса";
     public static final String T_BANK_BUSINESS_REGISTRATION_NAME = "Регистрация бизнеса";
     public static final String T_BANK_WORK_NAME = "Работа в Т-Банке";
-    public static final String T_BANK_AIR_TICKETS_NAME = "Авиабилеты";
     public static final String T_BANK_CASCO_NAME = "Каско";
     public static final String T_BANK_OSAGO_NAME = "ОСАГО";
     public static final String ALFA_BANK_NAME = "Альфа-банк";

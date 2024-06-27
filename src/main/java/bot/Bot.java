@@ -32,22 +32,19 @@ public class Bot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
 
             switch (messageText) {
-                case "/start" -> {
-                    usersId.put(chatId, true);
-                    executeMessage1(commandSlash.slashStart(chatId));
-                }
-                case "/chatId" -> executeMessage1(commandSlash.slashChatId(chatId));
-                case "/usersId" -> executeMessage1(sender(chatId, STR."Список пользователей: \{usersId}"));
+                case "/start" -> executeSender(commandSlash.slashStart(chatId, usersId));
+                case "/chatId" -> executeSender(commandSlash.slashChatId(chatId));
+                case "/usersId" -> executeSender(commandSlash.slashUsersId(chatId, usersId));
                 default -> {
 
                     if (messageText.toLowerCase().contains("neyarex") && usersId.get(chatId) && chatId != neyarexChatId) {
 
-                        executeMessage1(commandText.neyarexHandler(chatId, update, messageText));
+                        executeSender(commandText.neyarexHandler(chatId, update, messageText));
                         usersId.put(chatId, false);
-                        executeMessage1(sender(chatId, "Обращение отправлено!"));
+                        executeSender(sender(chatId, "Обращение отправлено!"));
                     } else if (!usersId.get(chatId) && chatId != neyarexChatId) {
 
-                        executeMessage1(sender(chatId, "Обращение уже отправлено. " +
+                        executeSender(sender(chatId, "Обращение уже отправлено. " +
                                 "Нельзя обратиться дважды!"));
                     } else {
 
@@ -65,20 +62,22 @@ public class Bot extends TelegramLongPollingBot {
             switch (callBackData) {
                 case BEGIN -> {
                     // убираем кнопку под стартовым сообщением
-                    executeMessage2(commandButton.buttonBegin(chatId, messageId));
+                    executeEditor(commandButton.buttonBegin(chatId, messageId));
                     // отправляем сообщение с главным меню
-                    executeMessage1(commandButton.buttonBegin2(chatId));
+                    executeSender(commandButton.buttonBegin2(chatId));
                 }
-                case MAIN_MANU -> executeMessage2(commandButton.buttonMainManu(chatId, messageId));
-                case WELCOME -> executeMessage2(commandButton.buttonWelcome(chatId, messageId));
-                case BANKS -> executeMessage2(commandButton.buttonBanks(chatId, messageId));
-                case T_BANK -> executeMessage2(commandButton.buttonTBank(chatId, messageId));
-                case ALFA_BANK -> executeMessage2(commandButton.buttonAlfaBank(chatId, messageId));
-                case WORKS -> executeMessage2(commandButton.buttonWorks(chatId, messageId));
+                case MAIN_MANU -> executeEditor(commandButton.buttonMainManu(chatId, messageId));
+                case WELCOME -> executeEditor(commandButton.buttonWelcome(chatId, messageId));
+                case BANKS -> executeEditor(commandButton.buttonBanks(chatId, messageId));
+                case T_BANK -> executeEditor(commandButton.buttonTBank(chatId, messageId));
+                case ALFA_BANK -> executeEditor(commandButton.buttonAlfaBank(chatId, messageId));
+                case WORKS -> executeEditor(commandButton.buttonWorks(chatId, messageId));
                 default -> {
                     try {
-                        usersId.put(Long.parseLong(callBackData), true);
-                        executeMessage2(editor(chatId, "Пользователь снова может обратиться к вам!", messageId));
+                        long userChatId = Long.parseLong(callBackData);
+                        usersId.put(userChatId, true);
+                        executeEditor(editor(chatId, STR."Пользователь снова может обратиться к вам! \{userChatId}", messageId));
+                        executeSender(sender(userChatId, "Ваше обращение обработано! Вы можете обратиться снова!"));
                     } catch (Exception _) {
                     }
                 }
@@ -89,10 +88,10 @@ public class Bot extends TelegramLongPollingBot {
     public void unknownMessage(long chatId) {
 
         SendMessage message = sender(chatId, UNKNOWN_MESSAGE);
-        executeMessage1(message);
+        executeSender(message);
     }
 
-    public void executeMessage1(SendMessage message) {
+    public void executeSender(SendMessage message) {
 
         try {
             execute(message);
@@ -101,7 +100,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void executeMessage2(EditMessageText message) {
+    public void executeEditor(EditMessageText message) {
 
         try {
             execute(message);
@@ -118,6 +117,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "7464725558:AAHkGrUuqqSoAbyMXWNVbqwTPkQd_2cmUWE";
+        return "token";
     }
 }
