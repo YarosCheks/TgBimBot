@@ -38,4 +38,10 @@ public class Slash {
 
         return sender(chatId, STR."Список пользователей: \{usersId}");
     }
+
+    public SendMessage slashSupport(long chatId, Map<Long, Boolean> sendSupport) {
+
+        sendSupport.put(chatId, true);
+        return sender(chatId, "Введите описание проблемы:");
+    }
 }

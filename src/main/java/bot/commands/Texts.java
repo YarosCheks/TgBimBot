@@ -14,16 +14,18 @@ import static bot.finalVariables.Other.*;
 
 public class Texts {
 
-    public SendMessage neyarexHandler(long chatId, Update update, String messageText) {
+    public SendMessage supportHandler(long chatId, Update update, String messageText) {
 
-        SendMessage message = sender(neyarexChatId,
-                STR."Пидор @\{update.getMessage().getChat().getUserName()} " +
-                        STR."обратился к вам:\n\n\{messageText}\n\nChatId: \{chatId}");
+        String username = update.getMessage().getChat().getUserName();
+
+        SendMessage message = sender(neyarexChatId, STR."<b>Отправитель:</b> \{username}\n" +
+                STR."<b>ID отправителя:</b> \{chatId}\n\n" +
+                STR."<b>Переданное сооющение:</b> \{messageText}");
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsButtons = new ArrayList<>();
         List<InlineKeyboardButton> rowButtons1 = new ArrayList<>();
-        rowButtons1.add(newButton("Обработано", Long.toString(chatId)));
+        rowButtons1.add(newButton("Обработано", STR."\{chatId} \{username} \{messageText}"));
         rowsButtons.add(rowButtons1);
         markup.setKeyboard(rowsButtons);
         message.setReplyMarkup(markup);
